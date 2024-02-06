@@ -1,0 +1,84 @@
+using System;
+
+class FileTransferCalculator
+{
+    static void Main()
+    {
+        double fileSize;
+        string unit;
+
+        do
+        {
+            fileSize = GetFileSize();
+            unit = GetFileUnit();
+
+            if (!IsValidInput(fileSize, unit))
+            {
+                Console.WriteLine("Invalid input. Please try again.");
+            }
+
+        } while (!IsValidInput(fileSize, unit));
+
+        double bytes = ConvertToBytes(fileSize, unit);
+        double transferTime = CalculateTransferTime(bytes, 960);
+
+        DisplayTransferTime(transferTime);
+    }
+
+    static double GetFileSize()
+    {
+        Console.WriteLine("Enter file size:");
+        if (double.TryParse(Console.ReadLine(), out double fileSize))
+        {
+            return fileSize;
+        }
+        else
+        {
+            return -1; // Indicates an error; the loop in Main will retry input.
+        }
+    }
+
+    static string GetFileUnit()
+    {
+        Console.WriteLine("Enter unit of file size (b, kb, mb):");
+        string unit = Console.ReadLine().ToLower();
+
+        if (unit != "b" && unit != "kb" && unit != "mb")
+        {
+            return "error"; // Indicates an error; the loop in Main will retry input.
+        }
+
+        return unit;
+    }
+
+    static bool IsValidInput(double fileSize, string unit)
+    {
+        return fileSize > 0 && unit != "error";
+    }
+
+    static double ConvertToBytes(double size, string unit)
+    {
+        switch (unit)
+        {
+            case "b":
+                return size;
+            case "kb":
+                return size * 1024;
+            case "mb":
+                return size * 1024 * 1024;
+            default:
+                return 0; // This is just to satisfy the compiler; it will never reach here.
+        }
+    }
+
+    static double CalculateTransferTime(double fileSize, int transmissionRate)
+    {
+        return fileSize / transmissionRate;
+    }
+
+    static void DisplayTransferTime(double seconds)
+    {
+        TimeSpan timeSpan = TimeSpan.FromSeconds(seconds);
+        Console.WriteLine("Time of file transfer: " + $"{timeSpan.Days} days, {timeSpan.Hours} hours, {timeSpan.Minutes} minutes, {timeSpan.Seconds} seconds");
+    }
+}
