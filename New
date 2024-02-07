@@ -1,0 +1,61 @@
+using System;
+
+class PrinterStatusChecker
+{
+    static void Main()
+    {
+        int paperQuantity = 0;
+        bool isValidInput = false;
+
+        while (!isValidInput)
+        {
+            isValidInput = TryGetPaperQuantityFromUser(out paperQuantity);
+            if (!isValidInput)
+            {
+                Console.WriteLine("Error: Please enter a valid numeric value.");
+            }
+            else
+            {
+                string status = CheckPrinterStatus(paperQuantity);
+                Console.WriteLine($"Printer Status: {status}");
+            }
+        }
+    }
+
+    static bool TryGetPaperQuantityFromUser(out int paperQuantity)
+    {
+        Console.Write("Enter the paper quantity: ");
+        string input = Console.ReadLine();
+
+        if (int.TryParse(input, out paperQuantity))
+        {
+            if (paperQuantity < 0)
+            {
+                Console.WriteLine("Error: Please enter a non-negative value.");
+                return false;
+            }
+            return true;
+        }
+        else
+        {
+            Console.WriteLine("Error: Please enter a valid numeric value.");
+            return false;
+        }
+    }
+
+    static string CheckPrinterStatus(int paperQuantity)
+    {
+        if (paperQuantity == 0)
+        {
+            return "No paper";
+        }
+        else if (paperQuantity > 0 && paperQuantity <= 10)
+        {
+            return "Low paper";
+        }
+        else
+        {
+            return "Ready to print";
+        }
+    }
+}
