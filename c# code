@@ -4,81 +4,139 @@ class FileTransferCalculator
 {
     static void Main()
     {
-        double fileSize;
+        int fileSize;
         string unit;
 
-        do
+        try
         {
+            #region GetFileSize
             fileSize = GetFileSize();
+            #endregion
+
+            #region GetFileUnit
             unit = GetFileUnit();
+            #endregion
 
-            if (!IsValidInput(fileSize, unit))
+            #region CalculateAndDisplay
+            if (IsValidInput(fileSize, unit))
             {
-                Console.WriteLine("Invalid input. Please try again.");
+                int bytes = ConvertToBytes(fileSize, unit);
+                int transferTime = CalculateTransferTime(bytes, 960);
+                DisplayTransferTime(transferTime);
             }
-
-        } while (!IsValidInput(fileSize, unit));
-
-        double bytes = ConvertToBytes(fileSize, unit);
-        double transferTime = CalculateTransferTime(bytes, 960);
-
-        DisplayTransferTime(transferTime);
+            else
+            {
+                Console.WriteLine("Invalid input. Exiting the program.");
+            }
+            #endregion
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+        }
     }
 
-    static double GetFileSize()
+    #region HelperMethods
+    static int GetFileSize()
     {
-        Console.WriteLine("Enter file size:");
-        if (double.TryParse(Console.ReadLine(), out double fileSize))
+        try
         {
+            int fileSize;
+            do
+            {
+                Console.WriteLine("Enter file size:");
+            } while (!int.TryParse(Console.ReadLine(), out fileSize) || fileSize <= 0);
+
             return fileSize;
         }
-        else
+        catch (Exception ex)
         {
-            return -1; // Indicates an error; the loop in Main will retry input.
+            Console.WriteLine($"Error in GetFileSize: {ex.Message}");
+            throw;
         }
     }
 
     static string GetFileUnit()
     {
-        Console.WriteLine("Enter unit of file size (b, kb, mb):");
-        string unit = Console.ReadLine().ToLower();
-
-        if (unit != "b" && unit != "kb" && unit != "mb")
+        try
         {
-            return "error"; // Indicates an error; the loop in Main will retry input.
+            string unit;
+            do
+            {
+                Console.WriteLine("Enter unit of file size (b, kb, mb):");
+                unit = Console.ReadLine().ToLower();
+            } while (unit != "b" && unit != "kb" && unit != "mb");
+
+            return unit;
         }
-
-        return unit;
-    }
-
-    static bool IsValidInput(double fileSize, string unit)
-    {
-        return fileSize > 0 && unit != "error";
-    }
-
-    static double ConvertToBytes(double size, string unit)
-    {
-        switch (unit)
+        catch (Exception ex)
         {
-            case "b":
-                return size;
-            case "kb":
-                return size * 1024;
-            case "mb":
-                return size * 1024 * 1024;
-            default:
-                return 0; // This is just to satisfy the compiler; it will never reach here.
+            Console.WriteLine($"Error in GetFileUnit: {ex.Message}");
+            throw;
         }
     }
 
-    static double CalculateTransferTime(double fileSize, int transmissionRate)
+    static bool IsValidInput(int fileSize, string unit)
     {
-        return fileSize / transmissionRate;
+        try
+        {
+            return fileSize > 0 && (unit == "b" || unit == "kb" || unit == "mb");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in IsValidInput: {ex.Message}");
+            throw;
+        }
     }
 
-    static void DisplayTransferTime(double seconds)
+    static int ConvertToBytes(int size, string unit)
     {
-        TimeSpan timeSpan = TimeSpan.FromSeconds(seconds);
-        Console.WriteLine("Time of file transfer: " + $"{timeSpan.Days} days, {timeSpan.Hours} hours, {timeSpan.Minutes} minutes, {timeSpan.Seconds} seconds");
+        try
+        {
+            switch (unit)
+            {
+                case "b":
+                    return size;
+                case "kb":
+                    return size * 1024;
+                case "mb":
+                    return size * 1024 * 1024;
+                default:
+                    return 0; // This is just to satisfy the compiler; it will never reach here.
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in ConvertToBytes: {ex.Message}");
+            throw;
+        }
     }
+
+    static int CalculateTransferTime(int fileSize, int transmissionRate)
+    {
+        try
+        {
+            return fileSize / transmissionRate;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in CalculateTransferTime: {ex.Message}");
+            throw;
+        }
+    }
+
+    static void DisplayTransferTime(int seconds)
+    {
+        try
+        {
+            TimeSpan timeSpan = TimeSpan.FromSeconds(seconds);
+            Console.WriteLine("Time of file transfer: " + $"{timeSpan.Days} days, {timeSpan.Hours} hours, {timeSpan.Minutes} minutes, {timeSpan.Seconds} seconds");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in DisplayTransferTime: {ex.Message}");
+            throw;
+        }
+    }
+    #endregion
 }
