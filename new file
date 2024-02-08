@@ -9,24 +9,73 @@ class PrinterStatusChecker
 
         while (!isValidInput)
         {
-            isValidInput = TryGetPaperQuantityFromUser(out paperQuantity);
+            try
+            {
+                isValidInput = TryGetPaperQuantityFromUser(out paperQuantity);
+                if (!isValidInput)
+                {
+                    Console.WriteLine("Error: Please enter a valid numeric value.");
+                }
+                else
+                {
+                    DisplayPrinterStatus(paperQuantity);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
         }
-
-        string status = CheckPrinterStatus(paperQuantity);
-        Console.WriteLine($"Printer Status: {status}");
     }
+
+    #region User Input
 
     static bool TryGetPaperQuantityFromUser(out int paperQuantity)
     {
-        Console.Write("Enter the paper quantity: ");
-        if (int.TryParse(Console.ReadLine(), out paperQuantity))
+        try
         {
-            return true;
+            Console.Write("Enter the paper quantity: ");
+            string input = Console.ReadLine();
+
+            if (IsValidInput(input, out paperQuantity))
+            {
+                return true;
+            }
+            else
+            {
+                throw new ArgumentException("Invalid input. Please enter a valid numeric value.");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Console.WriteLine("Invalid input. Please enter a valid numeric value.");
+            Console.WriteLine($"An error occurred: {ex.Message}");
             return false;
+        }
+    }
+
+    static bool IsValidInput(string input, out int paperQuantity)
+    {
+        if (int.TryParse(input, out paperQuantity))
+        {
+            return paperQuantity >= 0;
+        }
+        return false;
+    }
+
+    #endregion
+
+    #region Printer Status
+
+    static void DisplayPrinterStatus(int paperQuantity)
+    {
+        try
+        {
+            string status = CheckPrinterStatus(paperQuantity);
+            Console.WriteLine($"Printer Status: {status}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
         }
     }
 
@@ -45,4 +94,6 @@ class PrinterStatusChecker
             return "Ready to print";
         }
     }
+
+    #endregion
 }
