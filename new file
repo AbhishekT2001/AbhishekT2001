@@ -4,62 +4,61 @@ class PrinterStatusChecker
 {
     static void Main()
     {
-        int paperQuantity = 0;
-        bool isValidInput = false;
-
-        while (!isValidInput)
+        try
         {
-            try
+            while (true)
             {
-                isValidInput = TryGetPaperQuantityFromUser(out paperQuantity);
-                if (!isValidInput)
+                if (TryGetValidPaperQuantity(out int paperQuantity))
                 {
-                    Console.WriteLine("Error: Please enter a valid numeric value.");
+                    DisplayPrinterStatus(paperQuantity);
+                    break;
                 }
                 else
                 {
-                    DisplayPrinterStatus(paperQuantity);
+                    Console.WriteLine("Error: Please enter a valid non-negative numeric value.");
                 }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An unexpected error occurred: {ex.Message}");
         }
     }
 
     #region User Input
 
-    static bool TryGetPaperQuantityFromUser(out int paperQuantity)
+    static bool TryGetValidPaperQuantity(out int paperQuantity)
     {
         try
         {
             Console.Write("Enter the paper quantity: ");
             string input = Console.ReadLine();
-
-            if (IsValidInput(input, out paperQuantity))
-            {
-                return true;
-            }
-            else
-            {
-                throw new ArgumentException("Invalid input. Please enter a valid numeric value.");
-            }
+            return IsValidInput(input, out paperQuantity);
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"An error occurred: {ex.Message}");
+            Console.WriteLine($"An error occurred while getting user input: {ex.Message}");
+            paperQuantity = 0;
             return false;
         }
     }
 
     static bool IsValidInput(string input, out int paperQuantity)
     {
-        if (int.TryParse(input, out paperQuantity))
+        try
         {
-            return paperQuantity >= 0;
+            if (int.TryParse(input, out paperQuantity))
+            {
+                return paperQuantity >= 0;
+            }
+            return false;
         }
-        return false;
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred while validating input: {ex.Message}");
+            paperQuantity = 0;
+            return false;
+        }
     }
 
     #endregion
@@ -75,23 +74,31 @@ class PrinterStatusChecker
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"An error occurred: {ex.Message}");
+            Console.WriteLine($"An error occurred while displaying printer status: {ex.Message}");
         }
     }
 
     static string CheckPrinterStatus(int paperQuantity)
     {
-        if (paperQuantity == 0)
+        try
         {
-            return "No paper";
+            if (paperQuantity == 0)
+            {
+                return "No paper";
+            }
+            else if (paperQuantity > 0 && paperQuantity <= 10)
+            {
+                return "Low paper";
+            }
+            else
+            {
+                return "Ready to print";
+            }
         }
-        else if (paperQuantity > 0 && paperQuantity <= 10)
+        catch (Exception ex)
         {
-            return "Low paper";
-        }
-        else
-        {
-            return "Ready to print";
+            Console.WriteLine($"An error occurred while checking printer status: {ex.Message}");
+            return "Unknown";
         }
     }
 
