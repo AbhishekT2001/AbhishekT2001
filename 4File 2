@@ -1,0 +1,91 @@
+using System;
+using System.Xml;
+
+class XmlReaderApp
+{
+    public void Run(string[] args)
+    {
+        try
+        {
+            ValidateCommandLineArguments(args);
+
+            string xmlFilePath = args[0];
+            ValidateXmlFile(xmlFilePath);
+
+            XmlDocument xmlDoc = LoadXmlDocument(xmlFilePath);
+            ValidateDeviceConfiguration(xmlDoc);
+
+            // Perform actions like search and show device details based on your requirements
+            // For example:
+            // SearchDevice(xmlDoc, "deviceName");
+            // ShowDeviceDetails(xmlDoc, "deviceId");
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        catch (XmlException ex)
+        {
+            Console.WriteLine($"XML Error: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+        }
+    }
+
+    private void ValidateDeviceConfiguration(XmlDocument xmlDoc)
+    {
+        XmlNodeList deviceNodes = xmlDoc.SelectNodes("//device");
+
+        if (deviceNodes == null || deviceNodes.Count == 0)
+        {
+            throw new XmlException("No device configurations found in the XML.");
+        }
+
+        foreach (XmlNode deviceNode in deviceNodes)
+        {
+            ValidateDeviceNode(deviceNode);
+        }
+    }
+
+    private void ValidateDeviceNode(XmlNode deviceNode)
+    {
+        XmlNodeList requiredNodes = deviceNode.SelectNodes("deviceName | modelNumber | ipAddress | password | ssl");
+
+        if (requiredNodes.Count != 5)
+        {
+            throw new XmlException("Invalid device configuration. Missing required elements.");
+        }
+
+        // Additional validation logic can be added based on your specific requirements
+    }
+
+    private void ValidateCommandLineArguments(string[] args)
+    {
+        if (args.Length != 1)
+        {
+            throw new ArgumentException("Usage: XmlReaderApp <xmlFilePath>");
+        }
+    }
+
+    private void ValidateXmlFile(string filePath)
+    {
+        try
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(filePath);
+        }
+        catch (XmlException)
+        {
+            throw new XmlException("Invalid XML file or format.");
+        }
+    }
+
+    private XmlDocument LoadXmlDocument(string filePath)
+    {
+        XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.Load(filePath);
+        return xmlDoc;
+    }
+}
