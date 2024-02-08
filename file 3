@@ -10,7 +10,9 @@ class Program
             PrintArray("Original Array", multiArray);
 
             char arrayToSort = GetUserInputForSortArray();
-            SortArrayByColumn(multiArray, arrayToSort);
+            int sortOrder = GetUserInputForSortOrder();
+            
+            SortArrayByColumn(multiArray, arrayToSort, sortOrder);
             PrintArray($"Sorted {arrayToSort} Array", multiArray);
         }
         catch (Exception ex)
@@ -91,11 +93,31 @@ class Program
         }
     }
 
+    static int GetUserInputForSortOrder()
+    {
+        try
+        {
+            Console.Write("Enter the sort order (1 for ascending, 2 for descending): ");
+            int sortOrder;
+
+            if (!int.TryParse(Console.ReadLine(), out sortOrder) || (sortOrder != 1 && sortOrder != 2))
+            {
+                throw new ArgumentException("Invalid sort order. Please enter 1 for ascending or 2 for descending.");
+            }
+
+            return sortOrder;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error in GetUserInputForSortOrder: {ex.Message}");
+        }
+    }
+
     #endregion
 
     #region Sorting
 
-    static void SortArrayByColumn(int[,] array, char column)
+    static void SortArrayByColumn(int[,] array, char column, int sortOrder)
     {
         try
         {
@@ -112,7 +134,11 @@ class Program
             {
                 for (int j = i + 1; j < rows; j++)
                 {
-                    if (array[i, columnIndex] > array[j, columnIndex])
+                    int comparisonResult = sortOrder == 1
+                        ? array[i, columnIndex].CompareTo(array[j, columnIndex])  // Ascending order
+                        : array[j, columnIndex].CompareTo(array[i, columnIndex]);  // Descending order
+
+                    if (comparisonResult > 0)
                     {
                         SwapRows(array, i, j);
                     }
