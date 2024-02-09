@@ -2,6 +2,9 @@ using System;
 
 class Program
 {
+    // Constant for the result box
+    const string ResultBox = "+-----+-----+\n|  X  |  Y  |\n+-----+-----+";
+
     static void Main()
     {
         try
@@ -11,9 +14,9 @@ class Program
 
             char arrayToSort = GetUserInputForSortArray();
             int sortOrder = GetUserInputForSortOrder();
-            
+
             SortArrayByColumn(multiArray, arrayToSort, sortOrder);
-            PrintArray($"Sorted {arrayToSort} Array", multiArray);
+            DisplaySortedArray(multiArray);
         }
         catch (Exception ex)
         {
@@ -23,152 +26,13 @@ class Program
 
     #region User Input
 
-    static int[,] GetUserInputForArray()
-    {
-        try
-        {
-            Console.Write("Enter the number of rows: ");
-            int rows;
-
-            if (!int.TryParse(Console.ReadLine(), out rows) || rows <= 0)
-            {
-                throw new ArgumentException("Invalid number of rows. Please enter a positive integer.");
-            }
-
-            int[,] array = new int[rows, 2];
-
-            Console.WriteLine("Enter elements for the array:");
-
-            for (int i = 0; i < rows; i++)
-            {
-                array[i, 0] = GetUserInputForElement(i, "X");
-                array[i, 1] = GetUserInputForElement(i, "Y");
-            }
-
-            return array;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Error in GetUserInputForArray: {ex.Message}");
-        }
-    }
-
-    static int GetUserInputForElement(int rowIndex, string columnName)
-    {
-        try
-        {
-            Console.Write($"Enter element for [{rowIndex}, {columnName}]: ");
-            int element;
-
-            if (!int.TryParse(Console.ReadLine(), out element))
-            {
-                throw new ArgumentException($"Invalid input for {columnName}. Please enter an integer.");
-            }
-
-            return element;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Error in GetUserInputForElement: {ex.Message}");
-        }
-    }
-
-    static char GetUserInputForSortArray()
-    {
-        try
-        {
-            Console.Write("Enter the array to sort (X or Y): ");
-            char arrayToSort;
-
-            if (!char.TryParse(Console.ReadLine().ToUpper(), out arrayToSort) || (arrayToSort != 'X' && arrayToSort != 'Y'))
-            {
-                throw new ArgumentException("Invalid array choice. Please enter 'X' or 'Y'.");
-            }
-
-            return arrayToSort;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Error in GetUserInputForSortArray: {ex.Message}");
-        }
-    }
-
-    static int GetUserInputForSortOrder()
-    {
-        try
-        {
-            Console.Write("Enter the sort order (1 for ascending, 2 for descending): ");
-            int sortOrder;
-
-            if (!int.TryParse(Console.ReadLine(), out sortOrder) || (sortOrder != 1 && sortOrder != 2))
-            {
-                throw new ArgumentException("Invalid sort order. Please enter 1 for ascending or 2 for descending.");
-            }
-
-            return sortOrder;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Error in GetUserInputForSortOrder: {ex.Message}");
-        }
-    }
+    // ... (unchanged)
 
     #endregion
 
     #region Sorting
 
-    static void SortArrayByColumn(int[,] array, char column, int sortOrder)
-    {
-        try
-        {
-            int columnIndex = (column == 'X') ? 0 : (column == 'Y') ? 1 : -1;
-
-            if (columnIndex == -1)
-            {
-                throw new ArgumentException("Invalid array choice. Exiting program.");
-            }
-
-            int rows = array.GetLength(0);
-
-            for (int i = 0; i < rows - 1; i++)
-            {
-                for (int j = i + 1; j < rows; j++)
-                {
-                    int comparisonResult = sortOrder == 1
-                        ? array[i, columnIndex].CompareTo(array[j, columnIndex])  // Ascending order
-                        : array[j, columnIndex].CompareTo(array[i, columnIndex]);  // Descending order
-
-                    if (comparisonResult > 0)
-                    {
-                        SwapRows(array, i, j);
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Error in SortArrayByColumn: {ex.Message}");
-        }
-    }
-
-    static void SwapRows(int[,] array, int row1, int row2)
-    {
-        try
-        {
-            int columns = array.GetLength(1);
-
-            for (int k = 0; k < columns; k++)
-            {
-                int temp = array[row1, k];
-                array[row1, k] = array[row2, k];
-                array[row2, k] = temp;
-            }
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Error in SwapRows: {ex.Message}");
-        }
-    }
+    // ... (unchanged)
 
     #endregion
 
@@ -189,6 +53,30 @@ class Program
         catch (Exception ex)
         {
             throw new Exception($"Error in PrintArray: {ex.Message}");
+        }
+    }
+
+    static void DisplaySortedArray(int[,] array)
+    {
+        try
+        {
+            Console.WriteLine($"\nSorted Array:");
+
+            // Display the constant result box
+            Console.WriteLine(ResultBox);
+
+            int rows = array.GetLength(0);
+
+            for (int i = 0; i < rows; i++)
+            {
+                Console.WriteLine($"| {array[i, 0],-3} | {array[i, 1],-3} |");
+            }
+
+            Console.WriteLine("+-----+-----+");
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error in DisplaySortedArray: {ex.Message}");
         }
     }
 
