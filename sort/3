@@ -1,0 +1,57 @@
+using System;
+
+class SortingHandler
+{
+    public static void SortArrayByColumn(int[,] array, char column, int sortOrder)
+    {
+        try
+        {
+            int columnIndex = (column == 'X') ? 0 : (column == 'Y') ? 1 : -1;
+
+            if (columnIndex == -1)
+            {
+                throw new ArgumentException("Invalid array choice. Exiting program.");
+            }
+
+            int rows = array.GetLength(0);
+
+            for (int i = 0; i < rows - 1; i++)
+            {
+                for (int j = i + 1; j < rows; j++)
+                {
+                    int comparisonResult = sortOrder == 1
+                        ? array[i, columnIndex].CompareTo(array[j, columnIndex])  // Ascending order
+                        : array[j, columnIndex].CompareTo(array[i, columnIndex]);  // Descending order
+
+                    if (comparisonResult > 0)
+                    {
+                        SwapRows(array, i, j);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error in SortArrayByColumn: {ex.Message}");
+        }
+    }
+
+    static void SwapRows(int[,] array, int row1, int row2)
+    {
+        try
+        {
+            int columns = array.GetLength(1);
+
+            for (int k = 0; k < columns; k++)
+            {
+                int temp = array[row1, k];
+                array[row1, k] = array[row2, k];
+                array[row2, k] = temp;
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error in SwapRows: {ex.Message}");
+        }
+    }
+}
