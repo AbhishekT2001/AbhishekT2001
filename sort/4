@@ -1,0 +1,31 @@
+using System;
+
+class ProgramRunner
+{
+    const string ResultBox = "+-----+-----+\n|  X  |  Y  |\n+-----+-----+";
+
+    public static void Run()
+    {
+        do
+        {
+            try
+            {
+                int[,] multiArray = InputHandler.GetUserInputForArray();
+                PrintHandler.PrintArray("Original Array", multiArray);
+
+                char arrayToSort = InputHandler.GetUserInputForSortArray();
+                int sortOrder = InputHandler.GetUserInputForSortOrder();
+
+                SortingHandler.SortArrayByColumn(multiArray, arrayToSort, sortOrder);
+                PrintHandler.DisplaySortedArray(multiArray);
+
+                Console.Write("Do you want to restart the program? (y/n): ");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+
+        } while (Console.ReadLine()?.ToLower() == "y");
+    }
+}
