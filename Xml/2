@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using System.Xml;
+
+namespace DeviceManager
+{
+    static class XmlHandler
+    {
+        public static void ReadXML(List<Device> devices, Dictionary<string, Device> deviceMap, string xmlFilePath)
+        {
+            try
+            {
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(xmlFilePath);
+
+                XmlNodeList deviceNodes = xmlDoc.SelectNodes("/Devices/Device");
+
+                foreach (XmlNode deviceNode in deviceNodes)
+                {
+                    string serialNumber = deviceNode.SelectSingleNode("SerialNumber").InnerText;
+                    string ipAddress = deviceNode.SelectSingleNode("IPAddress").InnerText;
+                    string name = deviceNode.SelectSingleNode("Name").InnerText;
+                    string model = deviceNode.SelectSingleNode("Model").InnerText;
+                    string type = deviceNode.SelectSingleNode("Type").InnerText;
+                    int port = int.Parse(deviceNode.SelectSingleNode("Port").InnerText);
+                    bool useSSL = bool.Parse(deviceNode.SelectSingleNode("UseSSL").InnerText);
+                    string password = deviceNode.SelectSingleNode("Password").InnerText;
+
+                    Device device = new Device(serialNumber, ipAddress, name, model, type, port, useSSL, password);
+
+                    // Validate and add the device
+                    ValidateAndAddDevice(devices, deviceMap, device);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reading XML: {ex.Message}");
+            }
+        }
+
+        private static void ValidateAndAddDevice(List<Device> devices, Dictionary<string, Device> deviceMap, Device device)
+        {
+            // Example validation logic (customize based on your needs)
+            if (string.IsNullOrWhiteSpace(device.SerialNumber))
+            {
+                Console.WriteLine("Invalid device entry: SerialNumber cannot be empty.");
+                return;
+            }
+
+            // Check if device with the same serial number already exists
+            if (deviceMap.ContainsKey(device.SerialNumber))
+            {
+                Console.WriteLine($"Device with serial number '{device.SerialNumber}' already exists. Skipping duplicate entry.");
+            }
+            else
+            {
+                // Add the device to the list and map
+                devices.Add(device);
+                deviceMap.Add(device.SerialNumber, device);
+            }
+        }
+    }
+}
