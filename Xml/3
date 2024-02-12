@@ -1,0 +1,67 @@
+using System;
+
+namespace DeviceManager
+{
+    class Program
+    {
+        static List<Device> devices = new List<Device>();
+        static Dictionary<string, Device> deviceMap = new Dictionary<string, Device>();
+
+        static void Main(string[] args)
+        {
+            if (args.Length < 1)
+            {
+                Console.WriteLine("Usage: DeviceManager <xml_file_path>");
+                return;
+            }
+
+            string xmlFilePath = args[0];
+
+            // Read & parse XML file
+            XmlHandler.ReadXML(devices, deviceMap, xmlFilePath);
+
+            // Show menu until exit
+            ShowMenu();
+        }
+
+        static void ShowMenu()
+        {
+            Console.WriteLine("Choose option:");
+            Console.WriteLine("1. Show all devices");
+            Console.WriteLine("2. Search device by serial number");
+            Console.WriteLine("3. Exit");
+
+            string input = Console.ReadLine();
+            switch (input)
+            {
+                case "1":
+                    ShowDevices();
+                    break;
+                case "2":
+                    SearchDevice();
+                    break;
+                case "3":
+                    Console.WriteLine("Exiting program");
+                    Environment.Exit(0);
+                    break;
+                default:
+                    Console.WriteLine("Invalid input. Please enter 1, 2, or 3.");
+                    break;
+            }
+        }
+
+        static void ShowDevices()
+        {
+            // Print devices table
+        }
+
+        static void SearchDevice()
+        {
+            Console.Write("Enter serial number: ");
+            string serialNumber = Console.ReadLine();
+
+            // Get device from deviceMap 
+            // Print device details
+        }
+    }
+}
