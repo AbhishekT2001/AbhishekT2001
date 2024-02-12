@@ -1,1 +1,108 @@
+using System;
+using System.Collections.Generic;
+using System.Xml;
+using System.Security.Cryptography; 
 
+namespace DeviceManager
+{
+  class Device 
+  {
+    public string SerialNumber {get; set;}
+    public string IPAddress {get; set;}
+    public string Name {get; set;}
+    public string Model {get; set;}
+    public string Type {get; set;}
+    public int Port {get; set;}
+    public bool UseSSL {get; set;}
+    public string Password {get; set;}
+    
+    public Device(string serialNumber, string ipAddress, string name, string model, string type, int port, bool useSSL, string password)
+    {
+      this.SerialNumber = serialNumber;
+      this.IPAddress = ipAddress;
+      this.Name = name;
+      this.Model = model;
+      this.Type = type;
+      this.Port = port;
+      this.UseSSL = useSSL;
+      this.Password = password; 
+    }
+  }
+
+  class Program
+  {
+    static List<Device> devices = new List<Device>();
+    static Dictionary<string, Device> deviceMap = new Dictionary<string, Device>();
+    
+    static void Main(string[] args)
+    {
+      if(args.Length < 1)
+      {
+        Console.WriteLine("Usage: DeviceManager <xml_file_path>");
+        return;
+      }
+      
+      string xmlFilePath = args[0];
+      
+      // Read & parse XML file
+      ReadXML(xmlFilePath);
+      
+      // Show menu until exit
+      ShowMenu();
+    }
+
+    static void ReadXML(string xmlFilePath)
+    {
+      // Use XmlDocument to load and parse XML
+      // Validate each device entry
+      // Create Device object for each valid entry
+      // Add to devices list and deviceMap
+    }
+
+    static void ValidateDevice(Device device)
+    {
+      // Input validation
+      // Return error message if invalid
+    }
+
+    static void ShowMenu()
+    {
+      Console.WriteLine("Choose option:");
+      Console.WriteLine("1. Show all devices");
+      Console.WriteLine("2. Search device by serial number");
+      Console.WriteLine("3. Exit");
+
+      string input = Console.ReadLine();
+      switch(input)
+      {
+        case "1":
+          ShowDevices();
+          break;
+        case "2":
+          SearchDevice();
+          break;
+        case "3":
+          Console.WriteLine("Exiting program");
+          Environment.Exit(0);
+          break;
+        default:
+          Console.WriteLine("Invalid input. Please enter 1, 2 or 3.");
+          break;
+      }
+    }
+
+    static void ShowDevices()
+    {
+      // Print devices table
+    }
+
+    static void SearchDevice()
+    {
+      Console.Write("Enter serial number: ");
+      string serialNumber = Console.ReadLine();
+
+      // Get device from deviceMap 
+      // Print device details
+    }
+  }
+}
