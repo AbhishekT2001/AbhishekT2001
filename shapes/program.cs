@@ -1,60 +1,35 @@
+// Program.cs
 using System;
 
-public class Program
+class Program
 {
-    public static void Main(string[] args)
+    static void Main()
     {
-        Rectangle rectangle = new Rectangle();
-        GetRectangleDetails(rectangle);
-        rectangle.CalculateArea();
-        rectangle.CalculatePerimeter();
-        rectangle.SerialNumber = Guid.NewGuid();
-        rectangle.PrintDetails();
+        Console.WriteLine("Enter dimensions for Rectangle (length width):");
+        double rectLength = double.Parse(Console.ReadLine());
+        double rectWidth = double.Parse(Console.ReadLine());
+        Rectangle rectangle = new Rectangle(rectLength, rectWidth);
 
-        Oval oval = new Oval();
-        GetOvalDetails(oval);
-        oval.CalculateArea();
-        oval.CalculatePerimeter();
-        oval.SerialNumber = Guid.NewGuid();
-        oval.PrintDetails();
+        Console.WriteLine("\nEnter dimensions for Oval (majorAxis minorAxis):");
+        double ovalMajorAxis = double.Parse(Console.ReadLine());
+        double ovalMinorAxis = double.Parse(Console.ReadLine());
+        Oval oval = new Oval(ovalMajorAxis, ovalMinorAxis);
 
-        Circle circle = new Circle();
-        GetCircleDetails(circle);
-        circle.CalculateArea();
-        circle.CalculatePerimeter();
-        circle.SerialNumber = Guid.NewGuid();
-        circle.PrintDetails();
+        Console.WriteLine("\nEnter radius for Circle:");
+        double circleRadius = double.Parse(Console.ReadLine());
+        Circle circle = new Circle(circleRadius);
 
-        Console.ReadLine();
+        DisplayShapeDetails(rectangle);
+        DisplayShapeDetails(oval);
+        DisplayShapeDetails(circle);
     }
 
-    private static void GetRectangleDetails(Rectangle rectangle)
+    static void DisplayShapeDetails(Shape shape)
     {
-        Console.Write("Please enter the rectangle length (in cm): ");
-        rectangle.Length = double.Parse(Console.ReadLine());
-
-        Console.Write("Please enter the rectangle width (in cm): ");
-        rectangle.Width = double.Parse(Console.ReadLine());
-
-        Console.WriteLine();
-    }
-
-    private static void GetOvalDetails(Oval oval)
-    {
-        Console.Write("Please enter the oval major axis (in cm): ");
-        oval.MajorAxis = double.Parse(Console.ReadLine());
-
-        Console.Write("Please enter the oval minor axis (in cm): ");
-        oval.MinorAxis = double.Parse(Console.ReadLine());
-
-        Console.WriteLine();
-    }
-
-    private static void GetCircleDetails(Circle circle)
-    {
-        Console.Write("Please enter the circle radius (in cm): ");
-        circle.Radius = double.Parse(Console.ReadLine());
-
+        Console.WriteLine($"Shape Type: {shape.ClassName()}");
+        Console.WriteLine($"Serial Number: {shape.SerialNumber}");
+        Console.WriteLine($"X-Axis: {shape.XAxis}, Y-Axis: {shape.YAxis}");
+        Console.WriteLine($"Area: {shape.Area():F2}, Perimeter: {shape.Perimeter():F2}");
         Console.WriteLine();
     }
 }
