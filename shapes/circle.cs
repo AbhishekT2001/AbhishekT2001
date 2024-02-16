@@ -1,21 +1,12 @@
-using System;
-
-public class Circle : Oval
+// Circle.cs
+class Circle : Oval
 {
-    public double Radius { get; set; }
-
-    public override void CalculateArea()
+    public Circle(double radius) : base(2 * radius, 2 * radius)
     {
-        Area = Math.PI * Radius * Radius;
     }
 
-    public override void CalculatePerimeter()
+    public override string ClassName()
     {
-        Perimeter = 2 * Math.PI * Radius;
-    }
-    public Circle()
-    {
-        MajorAxis = Radius * 2;
-        MinorAxis = Radius * 2;
+        return "Circle";
     }
 }
