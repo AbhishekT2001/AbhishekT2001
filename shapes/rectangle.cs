@@ -1,17 +1,29 @@
+// Rectangle.cs
 using System;
 
-public class Rectangle : Shape
+class Rectangle : Shape
 {
-    public double Length { get; set; }
-    public double Width { get; set; }
+    public double Length { get; }
+    public double Width { get; }
 
-    public override void CalculateArea()
+    public Rectangle(double length, double width) : base(length, width)
     {
-        Area = Length * Width;
+        Length = length;
+        Width = width;
     }
 
-    public override void CalculatePerimeter()
+    public override double Area()
     {
-        Perimeter = 2 * (Length + Width);
+        return Length * Width;
+    }
+
+    public override double Perimeter()
+    {
+        return 2 * (Length + Width);
+    }
+
+    public override string ClassName()
+    {
+        return "Rectangle";
     }
 }
