@@ -1,19 +1,22 @@
+// Shape.cs
 using System;
 
-public abstract class Shape
+abstract class Shape
 {
-    public double Area { get; set; }
-    public double Perimeter { get; set; }
-    public Guid SerialNumber { get; set; }
+    private static int serialCounter = 1;
 
-    public abstract void CalculateArea();
-    public abstract void CalculatePerimeter();
+    public int SerialNumber { get; }
+    public double XAxis { get; }
+    public double YAxis { get; }
 
-    public void PrintDetails()
+    public Shape(double xAxis, double yAxis)
     {
-        Console.WriteLine("Serial Number: " + SerialNumber);
-        Console.WriteLine("Area: " + Area);
-        Console.WriteLine("Perimeter: " + Perimeter);
-        Console.WriteLine();
+        SerialNumber = serialCounter++;
+        XAxis = xAxis;
+        YAxis = yAxis;
     }
+
+    public abstract double Area();
+    public abstract double Perimeter();
+    public abstract string ClassName();
 }
