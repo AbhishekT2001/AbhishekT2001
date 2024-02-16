@@ -1,19 +1,29 @@
+// Oval.cs
 using System;
 
-public class Oval : Shape
+class Oval : Shape
 {
-    public double MajorAxis { get; set; }
-    public double MinorAxis { get; set; }
+    public double MajorAxis { get; }
+    public double MinorAxis { get; }
 
-    public override void CalculateArea()
+    public Oval(double majorAxis, double minorAxis) : base(majorAxis, minorAxis)
     {
-        Area = Math.PI * MajorAxis * MinorAxis;
+        MajorAxis = majorAxis;
+        MinorAxis = minorAxis;
     }
 
-    public override void CalculatePerimeter()
+    public override double Area()
     {
-        double a = MajorAxis / 2;
-        double b = MinorAxis / 2;
-        Perimeter = 2 * Math.PI * Math.Sqrt((a * a + b * b) / 2);
+        return Math.PI * MajorAxis * MinorAxis;
+    }
+
+    public override double Perimeter()
+    {
+        return 2 * Math.PI * Math.Sqrt((MajorAxis * MajorAxis + MinorAxis * MinorAxis) / 2);
+    }
+
+    public override string ClassName()
+    {
+        return "Oval";
     }
 }
