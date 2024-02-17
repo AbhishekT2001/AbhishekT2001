@@ -1,0 +1,6 @@
+public class InvestmentInfo
+{
+    public decimal Income { get; set; }
+    public decimal Investment { get; set; }
+    public decimal HouseLoan { get; set; }
+}
