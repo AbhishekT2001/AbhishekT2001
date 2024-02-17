@@ -1,0 +1,7 @@
+public class TaxCalcForMale : TaxCalculator
+{
+    public TaxCalcForMale(decimal slab1Amount, decimal slab2Amount, decimal slab3Amount, int slab2TaxRate, int slab3TaxRate, int slab4TaxRate)
+    {
+        // Initialize properties based on parameters
+    }
+}
