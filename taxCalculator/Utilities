@@ -1,0 +1,11 @@
+public static class TaxCalculatorUtilities
+{
+    public static bool IsValidName(string name, out string errorCode)
+    {
+        // Implement logic to validate name
+        errorCode = "Success"; // Replace with actual error code if needed
+        return true; // Replace with actual validation logic
+    }
+
+    // Implement other validation methods
+}
