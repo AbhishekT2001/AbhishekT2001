@@ -1,0 +1,36 @@
+public class TaxCalculator : InvestmentInfo
+{
+    public decimal NonTaxableAmount { get; set; }
+    public decimal TaxableAmount { get; set; }
+    public decimal TotalTax { get; set; }
+
+    // Properties for tax slabs
+    public decimal Slab1Amount { get; set; }
+    public decimal Slab2Amount { get; set; }
+    public decimal Slab3Amount { get; set; }
+    public int Slab2TaxRate { get; set; }
+    public int Slab3TaxRate { get; set; }
+    public int Slab4TaxRate { get; set; }
+
+    public string CalculateTaxDetails(PersonalInfo personalInfo, InvestmentInfo investmentInfo, out TaxCalculator taxInfo)
+    {
+        // Implement logic to calculate tax details
+
+        // Set taxInfo properties
+
+        return "Success"; // Replace with actual error code if needed
+    }
+
+    internal void CalcTaxableAmount(InvestmentInfo investmentInfo, out decimal nonTaxableAmount)
+    {
+        // Implement logic to calculate taxable amount
+        // Set nonTaxableAmount
+    }
+
+    internal decimal CalcTotalTax(decimal taxableAmount)
+    {
+        // Implement logic to calculate total tax
+        // Return total tax
+        return 0; // Placeholder, replace with actual calculation
+    }
+}
