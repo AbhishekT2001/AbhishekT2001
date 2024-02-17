@@ -1,0 +1,13 @@
+public class PersonalInfo
+{
+    public string PersonName { get; set; }
+    public string Dob { get; set; }
+    public char Gender { get; set; }
+
+    public PersonalInfo(string personName, string dob, char gender)
+    {
+        PersonName = personName;
+        Dob = dob;
+        Gender = gender;
+    }
+}
