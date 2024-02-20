@@ -5,6 +5,16 @@ class Circle : Oval
     {
     }
 
+    public override double Area()
+    {
+        return Math.PI * (MajorAxis / 2) * (MinorAxis / 2); 
+
+    public override double Perimeter()
+    {
+        return 2 * Math.PI * (MajorAxis / 2);
+    }
+
+
     public override string ClassName()
     {
         return "Circle";
