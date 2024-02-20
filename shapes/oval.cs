@@ -14,7 +14,7 @@ class Oval : Shape
 
     public override double Area()
     {
-        return Math.PI * MajorAxis * MinorAxis;
+         return Math.PI * MajorAxis * MinorAxis/4; 
     }
 
     public override double Perimeter()
