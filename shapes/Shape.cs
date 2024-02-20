@@ -18,5 +18,8 @@ abstract class Shape
 
     public abstract double Area();
     public abstract double Perimeter();
-    public abstract string ClassName();
+ public virtual string ClassName()
+    {
+        return "Shape";
+    }
 }
