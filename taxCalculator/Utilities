@@ -1,11 +1,150 @@
-public static class TaxCalculatorUtilities
-{
-    public static bool IsValidName(string name, out string errorCode)
-    {
-        // Implement logic to validate name
-        errorCode = "Success"; // Replace with actual error code if needed
-        return true; // Replace with actual validation logic
-    }
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-    // Implement other validation methods
+namespace TaxCalculator
+{
+    public static class Utilities
+    {
+        public static bool IsValidName(string name, out string errorCode)
+        {
+            errorCode = "";
+            if (string.IsNullOrEmpty(name))
+            {
+                errorCode = "E01";
+                return false;
+            }
+
+            if (name.Length > 50 || name.Any(c => !char.IsLetter(c)))
+            {
+                errorCode = "E03";
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool IsValidDOB(string dobString, out int age, out string errorCode)
+        {
+            errorCode = "";
+            age = 0; ;
+            if (string.IsNullOrEmpty(dobString))
+            {
+                errorCode = "E06";
+                return false;
+            }
+
+            DateTime dob;
+
+            try
+            {
+                dob = DateTime.ParseExact(dobString, "yyyy/MM/dd",
+                                          CultureInfo.InvariantCulture,
+                                          DateTimeStyles.None);
+            }
+            catch (FormatException)
+            {
+                errorCode = "E04";
+                return false;
+            }
+
+            DateTime today = DateTime.Today;
+            age = today.Year - dob.Year;
+            if (dob > today.AddYears(-age))
+            {
+                age--;
+            }
+
+            if (dob.Year < 1900 || dob.Year > today.Year - 18)
+            {
+                errorCode = "E05";
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool IsValidGender(char gender, out string errorCode)
+        {
+            errorCode = "";
+
+            if (gender != 'M' && gender != 'F')
+            {
+                errorCode = "E07";
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool IsValidIncome(string incomeString, out decimal income, out string errorCode)
+        {
+            errorCode = "";
+            income = 0;
+
+            if (!decimal.TryParse(incomeString, out income))
+            {
+                errorCode = "E07";
+                return false;
+            }
+
+            if (income < 0)
+            {
+                errorCode = "E07";
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool IsValidInvestment(string investmentString, out decimal investment, out string errorCode)
+        {
+            errorCode = "";
+            investment = 0;
+
+            if (!decimal.TryParse(investmentString, out investment))
+            {
+                errorCode = "E07";
+                return false;
+            }
+
+            if (investment < 0)
+            {
+                errorCode = "E07";
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool IsValidHomeLoan(string homeLoanString, decimal income, decimal investment,
+            out decimal homeLoan, out string errorCode)
+        {
+            errorCode = "";
+            homeLoan = 0;
+
+            if (!decimal.TryParse(homeLoanString, out homeLoan))
+            {
+                errorCode = "E07";
+                return false;
+            }
+
+            if (homeLoan < 0)
+            {
+                errorCode = "E07";
+                return false;
+            }
+
+            if (homeLoan + investment > income)
+            {
+                errorCode = "E13";
+                return false;
+            }
+
+            return true;
+        }
+    }
 }
