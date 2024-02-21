@@ -1,7 +1,24 @@
-public class TaxCalcForFemale : TaxCalculator
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static TaxCalculator.TaxCalculator;
+
+namespace TaxCalculator
 {
-    public TaxCalcForFemale(decimal slab1Amount, decimal slab2Amount, decimal slab3Amount, int slab2TaxRate, int slab3TaxRate)
+    public class TaxSlabFemale : TaxSlab
     {
-        // Initialize properties based on parameters
+        public override decimal CalcTotalTax(decimal taxableAmount)
+        {
+            if (taxableAmount <= 190000)
+                return 0;
+            else if (taxableAmount <= 300000)
+                return (taxableAmount - 190000) * 0.1m;
+            else if (taxableAmount <= 500000)
+                return (taxableAmount - 300000) * 0.2m + 11000;
+            else
+                return (taxableAmount - 500000) * 0.3m + 31000;
+        }
     }
 }
