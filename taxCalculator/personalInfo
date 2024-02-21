@@ -1,13 +1,16 @@
-public class PersonalInfo
+namespace TaxCalculator
 {
-    public string PersonName { get; set; }
-    public string Dob { get; set; }
-    public char Gender { get; set; }
-
-    public PersonalInfo(string personName, string dob, char gender)
+    public class PersonalInfo
     {
-        PersonName = personName;
-        Dob = dob;
-        Gender = gender;
+        public string Name { get; set; }
+        public DateTime DOB { get; set; }
+        public char Gender { get; set; }
+
+        public PersonalInfo(string name, DateTime dob, char gender)
+        {
+            Name = name;
+            DOB = dob;
+            Gender = gender;
+        }
     }
 }
