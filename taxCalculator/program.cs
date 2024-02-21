@@ -1,84 +1,98 @@
 using System;
-using TaxCalculatorLibrary;
 
-namespace TaxCalculatorApp
+namespace TaxCalculator
 {
-    class Program
+    public class TestTaxCalculator
     {
         static void Main(string[] args)
         {
-            // Gather user input
-            Console.WriteLine("Enter name:");
-            string name = Console.ReadLine();
+            // Test cases
 
-            Console.WriteLine("Enter date of birth (format: yyyy/MM/dd):");
-            string dateOfBirth = Console.ReadLine();
+            Test("John Doe", "1990/05/01", 'M', 100000, 10000, 5000, "54000", "46000", "0");
 
-            Console.WriteLine("Enter gender (M/F):");
-            char genderInput = Console.ReadKey().KeyChar;
-            Gender gender = GetGenderFromInput(genderInput);
+            Test("Jane Doe", "2000/05/01", 'F', 440000, 100000, 50000, "140000", "300000", "14000");
 
-            Console.WriteLine("\nEnter income:");
-            if (int.TryParse(Console.ReadLine(), out int income))
+            Test("Senior Citizen", "1960/05/01", 'M', 800000, 110000, 50000, "140000", "660000", "102000");
+
+            // Invalid test cases
+
+            Test("Invalid Name", "1990/05/01", 'M', 100000, 10000, 5000, "E03", "-", "-");
+
+            Test("John Doe", "200005/01", 'M', 100000, 10000, 5000, "E04", "-", "-");
+
+            Test("John Doe", "1800/05/01", 'M', 100000, 10000, 5000, "E05", "-", "-");
+
+            Test("John Doe", "", 'M', 100000, 10000, 5000, "E06", "-", "-");
+
+            Test("John Doe", "1990/05/01", 'A', 100000, 10000, 5000, "E07", "-", "-");
+
+            Test("", "1990/05/01", 'M', 100000, 10000, 5000, "E02", "-", "-");
+
+            Test("John Doe", "1990/05/01", 'M', -100, 10000, 5000, "E07", "-", "-");
+
+            Test("John Doe", "1990/05/01", 'M', 100000, -1000, 5000, "E07", "-", "-");
+
+            Test("John Doe", "1990/05/01", 'M', 100000, 10000, -500, "E07", "-", "-");
+
+            Test("John Doe", "1990/05/01", 'M', 100000, 110000, 5000, "E12", "-", "-");
+
+            Test("John Doe", "1990/05/01", 'M', 100000, 50000, 70000, "E13", "-", "-");
+        }
+
+        static void Test(string name, string dob, char gender, int income, int investment, int homeLoan,
+            string expectedNonTaxable, string expectedTaxable, string expectedTotalTax)
+        {
+            PersonalInfo personalInfo = new PersonalInfo(name, DateTime.ParseExact(dob, "yyyy/MM/dd", null), gender);
+            InvestmentInfo investmentInfo = new InvestmentInfo(income, investment, homeLoan);
+
+            TaxCalculator calculator = new TaxCalculator();
+            string errorCode = calculator.CalculateTaxDetails(personalInfo, investmentInfo);
+
+            string nonTaxable = calculator.NonTaxableAmount.ToString();
+            string taxable = calculator.TaxableAmount.ToString();
+            string totalTax = calculator.TotalTax.ToString();
+
+            bool isError = errorCode != "";
+
+            Console.WriteLine("Input: ");
+            Console.WriteLine($"Name: {name}");
+            Console.WriteLine($"DOB: {dob}");
+            Console.WriteLine($"Gender: {gender}");
+            Console.WriteLine($"Income: {income}");
+            Console.WriteLine($"Investment: {investment}");
+            Console.WriteLine($"Home Loan: {homeLoan}");
+
+            Console.WriteLine();
+
+            Console.WriteLine("Output: ");
+            Console.WriteLine($"Error code: {errorCode}");
+            Console.WriteLine($"Non Taxable Amount: {nonTaxable}");
+            Console.WriteLine($"Taxable Amount: {taxable}");
+            Console.WriteLine($"Total Tax: {totalTax}");
+
+            Console.WriteLine();
+
+            if (isError)
             {
-                // User input for income is successfully parsed as an integer
-
-                // Continue gathering input for investment
-                Console.WriteLine("Enter investment:");
-                if (int.TryParse(Console.ReadLine(), out int investment))
-                {
-                    // Continue gathering input for house loan/rent
-                    Console.WriteLine("Enter house loan/rent:");
-                    if (int.TryParse(Console.ReadLine(), out int houseLoan))
-                    {
-                        // All input values are successfully parsed
-
-                        // Call the TaxCalculator to calculate tax details
-                        TaxDetails taxDetails = TaxCalculator.CalculateTax(name, dateOfBirth, gender, income, investment, houseLoan);
-
-                        // Display the results
-                        DisplayTaxDetails(taxDetails);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalid input for house loan/rent. Please enter a valid positive integer.");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Invalid input for investment. Please enter a valid positive integer.");
-                }
+                Console.WriteLine($"Expected error code: {expectedNonTaxable}");
             }
             else
             {
-                // User input for income is not a valid positive integer
-                Console.WriteLine("Invalid input for income. Please enter a valid positive integer.");
+                Console.WriteLine($"Expected Non Taxable Amount: {expectedNonTaxable}");
+                Console.WriteLine($"Expected Taxable Amount: {expectedTaxable}");
+                Console.WriteLine($"Expected Total Tax: {expectedTotalTax}");
+
+                if (nonTaxable != expectedNonTaxable || taxable != expectedTaxable || totalTax != expectedTotalTax)
+                {
+                    Console.WriteLine("Test Failed!");
+                }
+                else
+                {
+                    Console.WriteLine("Test Passed!");
+                }
             }
 
-        }
-
-        static Gender GetGenderFromInput(char genderInput)
-        {
-            // Convert the char input to the Gender enum
-            switch (char.ToUpper(genderInput))
-            {
-                case 'M':
-                    return Gender.Male;
-                case 'F':
-                    return Gender.Female;
-                default:
-                    Console.WriteLine("Invalid input for gender. Defaulting to Male.");
-                    return Gender.Male;
-            }
-        }
-
-        static void DisplayTaxDetails(TaxDetails taxDetails)
-        {
-            // Implement logic to display tax details to the console
-            Console.WriteLine("\nTax Details:");
-            Console.WriteLine($"Non-Taxable Income: {taxDetails.NonTaxableIncome:C}");
-            Console.WriteLine($"Taxable Income: {taxDetails.TaxableIncome:C}");
-            Console.WriteLine($"Income Tax: {taxDetails.IncomeTax:C}");
+            Console.WriteLine();
         }
     }
 }
